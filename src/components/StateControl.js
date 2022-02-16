@@ -4,13 +4,13 @@ import GameBoard from './GameBoard';
 import PlayerForm from './PlayerForm';
 import ScoreCard from './ScoreCard';
 import WinScreen from './WinScreen';
+import PropTypes from 'prop-types';
 
 class StateControl extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       players: [],
-      tiles: [0,0,0,0,0,0,0,0,0],
       displayForm: true,
       displayWin: false,
       winner: null,
@@ -20,6 +20,8 @@ class StateControl extends React.Component {
 
   // ----to player form----
   handlePlayers = (players) => {
+    const {dispatch} = this.props;
+    dispatch({type: null});
     const player1 =  {
       name: players.p1Name,
       id: 1,
@@ -53,8 +55,17 @@ class StateControl extends React.Component {
     });
   }
   handleClickGameCell = (id) => {
+    const {dispatch} = this.props;
+
     let tempPlayers = this.state.players;
-    let tempTiles = this.state.tiles;
+    let tempTiles = this.props.tiles;
+    
+    const action = {
+      type: 'EDIT_TILES',
+      id: id,
+      currentPlayer: this.state.turn
+    }
+     /// Change!!
     switch(this.state.turn){
       case 1:
         tempTiles[id] = 1
@@ -65,10 +76,10 @@ class StateControl extends React.Component {
       default:
       return;
     }
+    dispatch(action);
     this.setState({
       players: tempPlayers,
-      reset: false,
-      tiles: tempTiles
+      reset: false
     });
     this.handleSwapTurns();
     this.handleWinGame(tempTiles)
@@ -86,6 +97,9 @@ class StateControl extends React.Component {
       [0, 4, 8],
       [2, 4, 6]
     ];
+    if(!currentTiles.includes(0)) {
+      this.setState({winner: "Cat Scratch", displayWin: true});
+    }
     for(let i = 0; i < winningTiles.length; i++) {
       const [a, b, c] = winningTiles[i];
       if(currentTiles[a] != 0 && currentTiles[a] === currentTiles[b] && currentTiles[a] === currentTiles[c]){
@@ -102,7 +116,24 @@ class StateControl extends React.Component {
   }
 
   handleReset = () => {
-    this.setState({displayWin: false, tiles: [0,0,0,0,0,0,0,0,0]});
+    const {dispatch} = this.props;
+    const action = {
+      type: 'RESET-TILES', 
+      id: null, 
+      currentPlayer: null
+    }
+    dispatch(action);
+    this.setState({displayWin: false});
+    //CHANGE
+  }
+
+  // ----Styles----
+  gameStyles = {
+    marginTop: "3em",
+    display: "flex",
+    width: "100%",
+    justifyContent: "center",
+    columnGap: "3em",
   }
 
   render() {
@@ -119,19 +150,29 @@ class StateControl extends React.Component {
       player2={this.state.players[1]}
       />;
     }
+    console.log(this.props.tiles);
     return (
       <React.Fragment>
       {winScreen}
+      <div style={this.gameStyles}>
       {currentState}
-      <GameBoard tiles={this.state.tiles} theClickening={this.handleClickGameCell}/>
+      <GameBoard tiles={this.props.tiles} theClickening={this.handleClickGameCell}/>
+      </div>
       </React.Fragment>
     );
   }
 }
-function mapStateToProps(state) {
-  return {
 
+StateControl.propTypes = {
+  tiles: PropTypes.array
+}
+
+const mapStateToProps = state => {
+  return {
+    tiles: state
   }
 }
-//StateControl = connect(mapStateToProps)(StateControl);
+
+StateControl = connect(mapStateToProps)(StateControl);
+
 export default StateControl;
