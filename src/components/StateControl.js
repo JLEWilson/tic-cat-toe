@@ -10,21 +10,25 @@ class StateControl extends React.Component {
     super(props);
     this.state = {
       players: [],
+      tiles: [0,0,0,0,0,0,0,0,0],
       displayForm: true,
       displayWin: false,
+      winner: null,
       turn: 0 // 0 = noone, 1 = p1, 2 = p2
     };
   }
+
+  // ----to player form----
   handlePlayers = (players) => {
     const player1 =  {
       name: players.p1Name,
-      score: 0,
-      tiles: []
+      id: 1,
+      score: 0
     };
     const player2 = {
       name: players.p2Name,
-      score: 0,
-      tiles: []
+      id: 2,
+      score: 0
     };
     this.setState({
       players: [
@@ -35,7 +39,9 @@ class StateControl extends React.Component {
       turn: 1
     });
   }
-  handleSwapTuns = () => {
+
+  // ----handles game cell click----
+  handleSwapTurns = () => {
     let nextTurn;
     if(this.state.turn === 1){
       nextTurn = 2;
@@ -48,26 +54,62 @@ class StateControl extends React.Component {
   }
   handleClickGameCell = (id) => {
     let tempPlayers = this.state.players;
+    let tempTiles = this.state.tiles;
     switch(this.state.turn){
       case 1:
-        tempPlayers[0].tiles.push(id);
+        tempTiles[id] = 1
         break;
       case 2:
-        tempPlayers[1].tiles.push(id);
+        tempTiles[id] = 2
         break;
       default:
       return;
     }
     this.setState({
-      players: tempPlayers
+      players: tempPlayers,
+      reset: false,
+      tiles: tempTiles
     });
-    this.handleSwapTuns();
+    this.handleSwapTurns();
+    this.handleWinGame(tempTiles)
   }
+
+  // ----to handle win----
+  handleWinGame = (currentTiles) => {
+    const winningTiles = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    for(let i = 0; i < winningTiles.length; i++) {
+      const [a, b, c] = winningTiles[i];
+      if(currentTiles[a] != 0 && currentTiles[a] === currentTiles[b] && currentTiles[a] === currentTiles[c]){
+        const winningPlayer = this.state.players[this.state.turn -1];
+        const losingPlayer = this.state.players.filter(p => p.id !== this.state.turn)[0];
+        winningPlayer.score += 1
+        let newPlayers = [];
+        winningPlayer.id === 1 ?
+          newPlayers = [winningPlayer, losingPlayer] :
+          newPlayers = [losingPlayer, winningPlayer]
+        this.setState({winner: winningPlayer.name, displayWin: true, players: newPlayers});
+      }
+    }
+  }
+
+  handleReset = () => {
+    this.setState({displayWin: false, tiles: [0,0,0,0,0,0,0,0,0]});
+  }
+
   render() {
     let currentState = null;
     let winScreen = null;
     if(this.state.displayWin){
-      winScreen = <WinScreen/>;
+      winScreen = <WinScreen winner={this.state.winner} reset={this.handleReset}/>;
     }
     if(this.state.displayForm){
       currentState = <PlayerForm setPlayers={this.handlePlayers}/>;
@@ -81,7 +123,7 @@ class StateControl extends React.Component {
       <React.Fragment>
       {winScreen}
       {currentState}
-      <GameBoard turn={this.state.turn} theClickening={this.handleClickGameCell}/>
+      <GameBoard tiles={this.state.tiles} theClickening={this.handleClickGameCell}/>
       </React.Fragment>
     );
   }

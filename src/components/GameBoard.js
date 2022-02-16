@@ -10,15 +10,15 @@ function GameBoard(props) {
   }
   return (
     <div style={gameBoardStyles}>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={0}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={1}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={2}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={3}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={4}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={5}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={6}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={7}/>
-      <GameCell turn={props.turn} theClickening={props.theClickening} id={8}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={0}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={1}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={2}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={3}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={4}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={5}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={6}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={7}/>
+      <GameCell tiles={props.tiles} theClickening={props.theClickening} id={8}/>
     </div>
   );
 }
