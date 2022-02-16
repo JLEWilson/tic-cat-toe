@@ -9,6 +9,7 @@ class GameCell extends React.Component{
       currentImg: 0
     }
   }
+
   style = {
     border: ".2em solid black",
     width: "10em",
@@ -17,16 +18,19 @@ class GameCell extends React.Component{
   }
 
   clickFunc = () => {
-    this.props.theClickening(this.props.id);
-    switch(this.props.turn){
-      case 1:
-        this.setState({currentImg: 1})
-        break;
-      case 2:
-        this.setState({currentImg: 2})
-        break;
-      default:
-      return
+    const clickable = this.state.currentImg === 0;
+    if(clickable){
+      this.props.theClickening(this.props.id);
+      switch(this.props.turn){
+        case 1:
+          this.setState({currentImg: 1})
+          break;
+        case 2:
+          this.setState({currentImg: 2})
+          break;
+        default:
+        return
+      }
     }
   }
 
