@@ -1,4 +1,6 @@
 import React from 'react';
+import catGif from '../img/carrier-cat.gif';
+import catScratchGif from '../img/cat-scratch.gif';
 
 function WinScreen(props) {
   function handleClick() {
@@ -7,7 +9,7 @@ function WinScreen(props) {
 
   const styles = {
     position: "absolute",
-    height: "40em",
+    height: "50em",
     width: "100%",
     backgroundColor: "rgba(0,0,0,.8)",
     paddingTop: "1em"
@@ -19,10 +21,17 @@ function WinScreen(props) {
     textAlign: "center"
   }
 
+  const gifStyle = {
+    maxHeight: "25em",
+    margin: "0 auto",
+    display: "block",
+    marginBottom: "1em"
+  }
+
   return (
     <div style={styles}>
-      
       <h1 style={h1Styles}>{props.winner === 'Cat Scratch' ? 'Cat Scratch' : `${props.winner} is the winner!!!`}</h1>
+      <img style={gifStyle} src={props.winner=== 'Cat Scratch' ? catScratchGif :catGif} />
       <button id="btn" onClick={handleClick}>play again?</button>
     </div>
   );
