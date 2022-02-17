@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/tic-cat-toe/static/css/main.d1ab2741.css",
-    "main.js": "/tic-cat-toe/static/js/main.f60231b9.js",
+    "main.js": "/tic-cat-toe/static/js/main.23900666.js",
     "static/media/carrier-cat.gif": "/tic-cat-toe/static/media/carrier-cat.ddbb7fbaf5e3c43c2e24.gif",
     "static/media/cat-scratch.gif": "/tic-cat-toe/static/media/cat-scratch.e82e408dd3f2334623c6.gif",
     "static/media/cat-glasses-wink.png": "/tic-cat-toe/static/media/cat-glasses-wink.7b8343b77afae7749c74.png",
@@ -12,10 +12,10 @@
     "static/media/cat-black.png": "/tic-cat-toe/static/media/cat-black.df14e9e0894fdd6d407b.png",
     "index.html": "/tic-cat-toe/index.html",
     "main.d1ab2741.css.map": "/tic-cat-toe/static/css/main.d1ab2741.css.map",
-    "main.f60231b9.js.map": "/tic-cat-toe/static/js/main.f60231b9.js.map"
+    "main.23900666.js.map": "/tic-cat-toe/static/js/main.23900666.js.map"
   },
   "entrypoints": [
     "static/css/main.d1ab2741.css",
-    "static/js/main.f60231b9.js"
+    "static/js/main.23900666.js"
   ]
 }
