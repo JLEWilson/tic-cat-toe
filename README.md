@@ -42,6 +42,6 @@ _Project for Epicodus, React, Week 3. Used to practice React-Redux. The user is 
 
 _If you run into any problems or find a bug, would like to reach me for a separate reason, feel free to send me an email @jacobleeeugenewilson@gmail.com with details of your issue._
 
-Copyright (c) _00/00/0000_ _Jacob Wilson(s)_
+Copyright (c) _02/17/2022_ _Christy Welch, Jacob Wilson_
 
 ![angry cat](./src/img/cat-scratch.gif)
