@@ -9,20 +9,32 @@ function PlayerForm(props) {
       p2Name: event.target.p2Name.value
     })
   }
+
+  const inputStyles = {
+    display: "block",
+    fontSize: "2rem",
+    marginBottom: "1em",
+    borderRadius: ".25em"
+  }
+
   return (
-    <React.Fragment>
+    <div>
       <form onSubmit={newPlayerFormSubmission}>
-        <input type="text"
+        <input
+        style={inputStyles}
+        type="text"
         name='p1Name'
         maxLength="16"
         placeholder='Player 1 Name'/>
-        <input type="text"
+        <input
+        style={inputStyles} 
+        type="text"
         name='p2Name'
         maxLength="16"
         placeholder='Player 2 Name'/>
-        <button type='submit'>Submit Players</button>
+        <button id="btn" type='submit'>Start Game</button>
       </form>
-    </React.Fragment>
+    </div>
   );
 }
 

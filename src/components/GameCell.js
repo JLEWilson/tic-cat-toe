@@ -8,7 +8,8 @@ function GameCell(props){
     border: ".2em solid black",
     width: "10em",
     height: "10em",
-    boxSizing: "border-box"
+    boxSizing: "border-box",
+    backgroundColor: "white"
   }
 
   function clickFunc(){
