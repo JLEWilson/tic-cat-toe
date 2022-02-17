@@ -5,15 +5,15 @@ import PlayerForm from './PlayerForm';
 import ScoreCard from './ScoreCard';
 import WinScreen from './WinScreen';
 import PropTypes from 'prop-types';
+import glassesCatWink from '../img/cat-glasses-wink.png';
+import glassesCat from '../img/cat-glasses.png';
+import catSideEye from '../img/cat-side-eye.png';
+import catEyesClosed from '../img/cat-eyes-closed.png';
 
 class StateControl extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      players: [],
-      winner: null,
-      turn: 0 // 0 = noone, 1 = p1, 2 = p2
-    };
+    this.state = {};
   }
 
   // ----to player form----
@@ -22,53 +22,46 @@ class StateControl extends React.Component {
     const action = {
       type: 'TOGGLE_FORM'
     }
-    const player1 =  {
-      name: players.p1Name,
-      id: 1,
-      score: 0
-    };
-    const player2 = {
-      name: players.p2Name,
-      id: 2,
-      score: 0
-    };
-
+    const action2 = {
+      type: 'EDIT_PLAYERS',
+      p1: {
+        name: players.p1Name,
+        id: 1,
+        score: 0
+      },
+      p2: {
+        name: players.p2Name,
+        id: 2,
+        score: 0
+      }
+    }
+    const action3 = {
+      type: 'SWITCH_TURN'
+    }
     dispatch(action);
-    
-    this.setState({
-      players: [
-        player1,
-        player2
-      ],
-      turn: 1
-    });
+    dispatch(action2)
+    dispatch(action3);
   }
 
   // ----handles game cell click----
   handleSwapTurns = () => {
-    let nextTurn;
-    if(this.state.turn === 1){
-      nextTurn = 2;
-    } else {
-      nextTurn = 1;
+    const {dispatch} = this.props;
+    const action = {
+      type: 'SWITCH_TURN'
     }
-    this.setState({
-      turn: nextTurn
-    });
+    dispatch(action);
   }
   handleClickGameCell = (id) => {
     const {dispatch} = this.props;
-
-    let tempPlayers = this.state.players;
     let tempTiles = this.props.tiles;
     
     const action = {
       type: 'EDIT_TILES',
       id: id,
-      currentPlayer: this.state.turn
+      currentPlayer: this.props.turn
     }
      /// Change!!
-    switch(this.state.turn){
+    switch(this.props.turn){
       case 1:
         tempTiles[id] = 1
         break;
@@ -79,16 +72,13 @@ class StateControl extends React.Component {
       return;
     }
     dispatch(action);
-    this.setState({
-      players: tempPlayers,
-      reset: false
-    });
     this.handleSwapTurns();
     this.handleWinGame(tempTiles)
   }
 
   // ----to handle win----
   handleWinGame = (currentTiles) => {
+    let gotAWinner = null;
     const {dispatch} = this.props;
     const action = {
       type: 'TOGGLE_WIN'
@@ -103,23 +93,36 @@ class StateControl extends React.Component {
       [0, 4, 8],
       [2, 4, 6]
     ];
-    if(!currentTiles.includes(0)) {
-      dispatch(action);
-      this.setState({winner: "Cat Scratch"});
-    }
     for(let i = 0; i < winningTiles.length; i++) {
       const [a, b, c] = winningTiles[i];
       if(currentTiles[a] != 0 && currentTiles[a] === currentTiles[b] && currentTiles[a] === currentTiles[c]){
-        const winningPlayer = this.state.players[this.state.turn -1];
-        const losingPlayer = this.state.players.filter(p => p.id !== this.state.turn)[0];
-        winningPlayer.score += 1
-        let newPlayers = [];
-        winningPlayer.id === 1 ?
-          newPlayers = [winningPlayer, losingPlayer] :
-          newPlayers = [losingPlayer, winningPlayer];
-          dispatch(action);
-        this.setState({winner: winningPlayer.name, players: newPlayers});
+        gotAWinner = 'yes'
+        const action2 = {
+          type: 'PLAYER_WIN',
+          p1: this.props.players.player1,
+          p2: this.props.players.player2,
+          winner: currentTiles[a]
+        }
+        let winner;
+        currentTiles[a] === 1 ?
+        winner = this.props.players.player1.name :
+        winner = this.props.players.player2.name;
+        const action3 = {
+          type: "SET_WINNER",
+          winner: winner
+        }
+        dispatch(action);
+        dispatch(action2)
+        dispatch(action3)
       }
+    }
+    if (!currentTiles.includes(0) && gotAWinner !== "yes") {
+      const action4 = {
+        type: "SET_WINNER",
+        winner: "CAT SCRATCH"
+      }
+      dispatch(action);
+      dispatch(action4);
     }
   }
 
@@ -139,33 +142,68 @@ class StateControl extends React.Component {
 
   // ----Styles----
   gameStyles = {
-    marginTop: "3em",
     display: "flex",
     width: "100%",
     justifyContent: "center",
     columnGap: "3em",
   }
 
+  catImageTopDiv = {
+    display: "flex",
+    width: "100%"
+  }
+
+  topRightCat = {
+    marginLeft: "1em"
+  }
+
+  topLeftCat = {
+    marginLeft: "auto",
+    marginRight: "2em"
+  }
+
+  catImageBottomDiv = {
+    display: "flex",
+    width: "100%"
+  }
+
+  bottomRightCat = {
+    marginLeft: "1em"
+  }
+
+  bottomLeftCat = {
+    marginLeft: "auto",
+    marginRight: "2em"
+  }
+
   render() {
     let currentState = null;
     let winScreen = null;
     if(this.props.displayWin){
-      winScreen = <WinScreen winner={this.state.winner} reset={this.handleReset}/>;
+      winScreen = <WinScreen winner={this.props.winner} reset={this.handleReset}/>;
     }
     if(this.props.displayForm){
       currentState = <PlayerForm setPlayers={this.handlePlayers}/>;
     } else {
       currentState = <ScoreCard 
-      player1={this.state.players[0]}
-      player2={this.state.players[1]}
+      player1={this.props.players.player1}
+      player2={this.props.players.player2}
       />;
     }
     return (
       <React.Fragment>
       {winScreen}
+      <div style={this.catImageTopDiv}>
+      <img style={this.topRightCat}src={glassesCatWink} />
+      <img style={this.topLeftCat} src={catEyesClosed} />
+      </div>
       <div style={this.gameStyles}>
       {currentState}
       <GameBoard tiles={this.props.tiles} theClickening={this.handleClickGameCell}/>
+      </div>
+      <div style={this.catImageBottomDiv}>
+      <img style={this.bottomRightCat} src={catSideEye} />
+      <img style={this.bottomLeftCat} src={glassesCat} />
       </div>
       </React.Fragment>
     );
@@ -175,14 +213,20 @@ class StateControl extends React.Component {
 StateControl.propTypes = {
   tiles: PropTypes.array,
   displayForm: PropTypes.bool,
-  displayWin: PropTypes.bool
+  displayWin: PropTypes.bool,
+  players: PropTypes.object,
+  turn: PropTypes.number,
+  winner: PropTypes.string
 }
 
 const mapStateToProps = state => {
   return {
     tiles: state.tiles,
     displayForm: state.displayForm,
-    displayWin: state.displayWin
+    displayWin: state.displayWin,
+    players: state.players,
+    turn: state.turn,
+    winner: state.winner
   }
 }
 
