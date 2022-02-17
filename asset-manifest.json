@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d1ab2741.css",
+    "main.js": "/static/js/main.c75c7316.js",
+    "static/media/carrier-cat.gif": "/static/media/carrier-cat.ddbb7fbaf5e3c43c2e24.gif",
+    "static/media/cat-scratch.gif": "/static/media/cat-scratch.e82e408dd3f2334623c6.gif",
+    "static/media/cat-glasses-wink.png": "/static/media/cat-glasses-wink.7b8343b77afae7749c74.png",
+    "static/media/cat-glasses.png": "/static/media/cat-glasses.5c450b9fe280dfd2145c.png",
+    "static/media/cat-side-eye.png": "/static/media/cat-side-eye.8cb7caef267a05724ea7.png",
+    "static/media/cat-white.png": "/static/media/cat-white.669305dc03e346973064.png",
+    "static/media/cat-eyes-closed.png": "/static/media/cat-eyes-closed.8f7dbf91514dc1d281de.png",
+    "static/media/cat-black.png": "/static/media/cat-black.df14e9e0894fdd6d407b.png",
+    "index.html": "/index.html",
+    "main.d1ab2741.css.map": "/static/css/main.d1ab2741.css.map",
+    "main.c75c7316.js.map": "/static/js/main.c75c7316.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d1ab2741.css",
+    "static/js/main.c75c7316.js"
+  ]
+}
