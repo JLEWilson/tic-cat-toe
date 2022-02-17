@@ -1,4 +1,4 @@
-# _Project Title_
+# _Tic-Cat-Toe_
 
 #### By _**Christy Welch, Jacob Wilson**_
 
