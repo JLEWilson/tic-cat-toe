@@ -11,8 +11,6 @@ class StateControl extends React.Component {
     super(props);
     this.state = {
       players: [],
-      displayForm: true,
-      displayWin: false,
       winner: null,
       turn: 0 // 0 = noone, 1 = p1, 2 = p2
     };
@@ -21,7 +19,9 @@ class StateControl extends React.Component {
   // ----to player form----
   handlePlayers = (players) => {
     const {dispatch} = this.props;
-    dispatch({type: null});
+    const action = {
+      type: 'TOGGLE_FORM'
+    }
     const player1 =  {
       name: players.p1Name,
       id: 1,
@@ -32,12 +32,14 @@ class StateControl extends React.Component {
       id: 2,
       score: 0
     };
+
+    dispatch(action);
+    
     this.setState({
       players: [
         player1,
         player2
       ],
-      displayForm: false,
       turn: 1
     });
   }
@@ -87,6 +89,10 @@ class StateControl extends React.Component {
 
   // ----to handle win----
   handleWinGame = (currentTiles) => {
+    const {dispatch} = this.props;
+    const action = {
+      type: 'TOGGLE_WIN'
+    }
     const winningTiles = [
       [0, 1, 2],
       [3, 4, 5],
@@ -98,7 +104,8 @@ class StateControl extends React.Component {
       [2, 4, 6]
     ];
     if(!currentTiles.includes(0)) {
-      this.setState({winner: "Cat Scratch", displayWin: true});
+      dispatch(action);
+      this.setState({winner: "Cat Scratch"});
     }
     for(let i = 0; i < winningTiles.length; i++) {
       const [a, b, c] = winningTiles[i];
@@ -109,8 +116,9 @@ class StateControl extends React.Component {
         let newPlayers = [];
         winningPlayer.id === 1 ?
           newPlayers = [winningPlayer, losingPlayer] :
-          newPlayers = [losingPlayer, winningPlayer]
-        this.setState({winner: winningPlayer.name, displayWin: true, players: newPlayers});
+          newPlayers = [losingPlayer, winningPlayer];
+          dispatch(action);
+        this.setState({winner: winningPlayer.name, players: newPlayers});
       }
     }
   }
@@ -122,9 +130,11 @@ class StateControl extends React.Component {
       id: null, 
       currentPlayer: null
     }
+    const action2 = {
+      type: 'TOGGLE_WIN'
+    }
     dispatch(action);
-    this.setState({displayWin: false});
-    //CHANGE
+    dispatch(action2);
   }
 
   // ----Styles----
@@ -139,10 +149,10 @@ class StateControl extends React.Component {
   render() {
     let currentState = null;
     let winScreen = null;
-    if(this.state.displayWin){
+    if(this.props.displayWin){
       winScreen = <WinScreen winner={this.state.winner} reset={this.handleReset}/>;
     }
-    if(this.state.displayForm){
+    if(this.props.displayForm){
       currentState = <PlayerForm setPlayers={this.handlePlayers}/>;
     } else {
       currentState = <ScoreCard 
@@ -150,7 +160,6 @@ class StateControl extends React.Component {
       player2={this.state.players[1]}
       />;
     }
-    console.log(this.props.tiles);
     return (
       <React.Fragment>
       {winScreen}
@@ -164,12 +173,16 @@ class StateControl extends React.Component {
 }
 
 StateControl.propTypes = {
-  tiles: PropTypes.array
+  tiles: PropTypes.array,
+  displayForm: PropTypes.bool,
+  displayWin: PropTypes.bool
 }
 
 const mapStateToProps = state => {
   return {
-    tiles: state
+    tiles: state.tiles,
+    displayForm: state.displayForm,
+    displayWin: state.displayWin
   }
 }
 
